@@ -1,0 +1,93 @@
+Section A - Academic Project:
+
+Title: Optimizing Warehouse Location and Route Planning for Efficient Factory Goods Collection
+
+1. System Functionality:
+The objective of this academic project was to develop an algorithm to strategically locate a warehouse and plan the route for a transport truck to collect items from multiple factories in a plane/grid while minimizing the total distance traveled.
+
+2. Similar Systems:
+Similar systems in the wild include location optimization and vehicle routing problems. Various optimization techniques, such as the Traveling Salesman Problem (TSP), Vehicle Routing Problem (VRP), and their variants, have been used to address similar challenges in logistics and transportation industries.
+
+3. Development Approach:
+The development problem involved two main tasks: warehouse location selection and route planning. The approach followed the following steps:
+   a. Warehouse Location Selection:
+      - Calculate the center of gravity or centroid of all factory coordinates to approximate the best location for the warehouse.
+      - Evaluate alternative locations based on distance metrics to each factory and select the one with the minimum total distance to all factories.
+
+   b. Route Planning:
+      - Use graph-based algorithms like Dijkstra's or A* algorithm to find the shortest path from the warehouse to each factory while avoiding no trespass areas.
+      - Combine the individual paths to form the complete route for the truck to visit all factories and return to the warehouse.
+
+4. Copying Code from Stack Overflow:
+In the development process, there were instances where code snippets from Stack Overflow were used for certain sub-tasks. Some interesting aspects where code was copied include:
+   - Parsing and handling input data in various formats.
+   - Implementing graph-based algorithms to find the shortest path between two points while avoiding certain cells (no trespass areas).
+
+5. Lessons Learned from Copy-Paste:
+Explicitly mentioning some of the things learned from specific copy-paste instances:
+   - Understanding different data structures and algorithms used in the code snippets.
+   - Dealing with edge cases and error handling in graph traversal algorithms.
+   - Gaining insights into code optimization techniques for improved performance.
+
+
+
+section -B
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class APICaller {
+    private AtomicInteger tokenBucket;
+    private long lastCallTime;
+
+    public APICaller() {
+        this.tokenBucket = new AtomicInteger(15);
+        this.lastCallTime = 0;
+    }
+
+    public String call_me(String input) {
+        long now = System.currentTimeMillis();
+        long timeSinceLastCall = now - lastCallTime;
+
+        if (timeSinceLastCall < 60000) {
+            if (tokenBucket.get() > 0) {
+                tokenBucket.decrementAndGet();
+            } else {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(60000 - timeSinceLastCall);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tokenBucket.set(14);
+            }
+        } else {
+            tokenBucket.set(14);
+        }
+
+        lastCallTime = now;
+        return call_me_internal(input); // Replace with the actual API call function
+    }
+
+    // Replace this method with the actual implementation of the API call
+    private String call_me_internal(String input) {
+        // Your API call implementation goes here
+        return "API response for input: " + input;
+    }
+
+    public static void main(String[] args) {
+        APICaller apiCaller = new APICaller();
+
+        // Simulate 20 calls per minute
+        for (int i = 1; i <= 20; i++) {
+            String input = "Input data " + i;
+            String response = apiCaller.call_me(input);
+            System.out.println(response);
+        }
+    }
+}
+
+The APICaller class is designed to handle the API calls and manage the token bucket.
+The token_bucket represents the number of available API calls in the current minute. It starts at 15 and is decremented with each API call.
+The last_call_time keeps track of the timestamp of the last API call made.
+When the call_me method is called, it calculates the time elapsed since the last call (time_since_last_call).
+If the time elapsed is less than 60 seconds (i.e., within the same minute), it checks the token_bucket. If there are available tokens, it makes the API call and decrements the token_bucket. If the token_bucket is empty, it waits for the remaining time in the minute (60 seconds) before resetting the token_bucket to 14 (since one call will be made after the waiting period).
+If the time elapsed is greater than or equal to 60 seconds (i.e., a new minute has started), the token_bucket is reset to 14.
